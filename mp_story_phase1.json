@@ -1,0 +1,135 @@
+{
+  "title": "The Abandoned Outpost - Phase 1",
+  "max_players": 2,
+  "player_character_templates": {
+    "Scout": {
+      "description": "Quick and observant, good at spotting details.",
+      "initial_stats": {"health": 80, "agility": 7, "perception": 8},
+      "initial_inventory": ["rations", "climbing_gear"]
+    },
+    "Technician": {
+      "description": "Knows their way around machines and electronics.",
+      "initial_stats": {"health": 70, "intelligence": 8, "tech_skill": 7},
+      "initial_inventory": ["rations", "multitool", "wires"]
+    }
+  },
+  "initial_stats": {}, "initial_inventory": [],
+  "start_node_id": "outpost_exterior",
+  "nodes": {
+    "outpost_exterior": {
+      "id": "outpost_exterior",
+      "text": "You stand before an abandoned research outpost, nestled in a barren, rocky landscape. The main gate is sealed shut. {current_player_name}, it's your turn to act.",
+      "choices": [
+        {
+          "text": "Scout: Scan the perimeter for alternate entrances.",
+          "target_node_id": "scout_finds_vent",
+          "actionable_by_roles": ["Scout"],
+          "effects_for_chooser": [{"type": "stat_change", "stat": "perception", "change_by": 1}]
+        },
+        {
+          "text": "Technician: Examine the gate's control panel.",
+          "target_node_id": "tech_checks_panel",
+          "actionable_by_roles": ["Technician"]
+        },
+        {
+          "text": "All: Discuss opening the main gate by force (requires vote).",
+          "target_node_id": "gate_forced_open",
+          "requires_vote": true,
+          "effects": [
+            {"type": "stat_change", "stat": "team_morale", "set_to": 5}
+          ]
+        }
+      ]
+    },
+    "scout_finds_vent": {
+      "id": "scout_finds_vent",
+      "text": "{acting_player_name} discovers a narrow ventilation shaft after a careful search. It looks like a tight squeeze. {current_player_name}, what's the plan?",
+      "choices": [
+        {
+          "text": "Scout: Attempt to enter the vent.",
+          "target_node_id": "vent_crawl",
+          "actionable_by_roles": ["Scout"],
+          "conditions": [{"type": "stat_condition", "stat": "agility", "requires_greater_than": 6}]
+        },
+        {
+          "text": "Technician: Check if the vent's fan can be disabled from outside.",
+          "target_node_id": "tech_disables_fan",
+          "actionable_by_roles": ["Technician"]
+        },
+        {
+          "text": "All: Regroup at the main gate.",
+          "target_node_id": "outpost_exterior"
+        }
+      ]
+    },
+    "tech_checks_panel": {
+      "id": "tech_checks_panel",
+      "text": "{acting_player_name} finds the control panel is fried, but there's an auxiliary power socket. Perhaps it can be bypassed. {current_player_name}, your decision.",
+      "choices": [
+        {
+          "text": "Technician: Try to hotwire the panel using your multitool and wires.",
+          "target_node_id": "panel_hotwired",
+          "actionable_by_roles": ["Technician"],
+          "conditions": [{"type": "stat_condition", "stat": "tech_skill", "requires_greater_than": 6}],
+          "effects_for_chooser": [{"type": "inventory_change", "item": "wires", "action": "remove"}]
+        },
+        {
+          "text": "Scout: Look for a manual override lever nearby.",
+          "target_node_id": "scout_finds_lever",
+          "actionable_by_roles": ["Scout"]
+        },
+        {
+          "text": "All: Regroup and consider other options.",
+          "target_node_id": "outpost_exterior"
+        }
+      ]
+    },
+    "gate_forced_open": {
+      "id": "gate_forced_open",
+      "text": "The team successfully forces the main gate! It groans open, revealing a dusty reception area.",
+      "choices": [
+        {"text": "Enter the reception area", "target_node_id": "reception_area"}
+      ]
+    },
+    "vent_crawl": {
+      "id": "vent_crawl",
+      "text": "{acting_player_name} successfully navigates the cramped ventilation shaft and drops into the security room. The main gate controls are here!",
+      "choices": [
+        {"text": "Unlock the main gate from the inside.", "target_node_id": "gate_unlocked_from_inside"}
+      ]
+    },
+    "tech_disables_fan": {
+        "id": "tech_disables_fan",
+        "text": "{acting_player_name} skillfully disables the vent fan. The way is clear for the Scout.",
+        "choices": [
+            {"text": "Scout: Now enter the vent.", "target_node_id": "vent_crawl", "actionable_by_roles": ["Scout"]}
+        ]
+    },
+    "panel_hotwired": {
+        "id": "panel_hotwired",
+        "text": "{acting_player_name} expertly hotwires the panel! The main gate slides open.",
+        "choices": [
+            {"text": "Proceed into the reception area", "target_node_id": "reception_area"}
+        ]
+    },
+    "scout_finds_lever":{
+        "id": "scout_finds_lever",
+        "text": "{acting_player_name} spots a hidden manual override lever! With a heave, the gate opens.",
+        "choices": [
+            {"text": "Enter the outpost", "target_node_id": "reception_area"}
+        ]
+    },
+    "gate_unlocked_from_inside":{
+        "id": "gate_unlocked_from_inside",
+        "text": "The main gate is now unlocked. The team can enter.",
+        "choices": [
+            {"text": "Gather in the reception area", "target_node_id": "reception_area"}
+        ]
+    },
+    "reception_area": {
+      "id": "reception_area",
+      "text": "The reception is quiet, filled with overturned furniture. A terminal flickers on a nearby desk. This phase of the PoC is complete!",
+      "choices": []
+    }
+  }
+}

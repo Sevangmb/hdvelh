@@ -1,0 +1,169 @@
+{
+  "title": "The Goblin's Cave - Advanced",
+  "initial_stats": {
+    "health": 100,
+    "gold": 10,
+    "strength": 5
+  },
+  "initial_inventory": ["rusty_dagger"],
+  "start_node_id": "cave_entrance",
+  "nodes": {
+    "cave_entrance": {
+      "id": "cave_entrance",
+      "text": "You stand at the dark entrance of a goblin cave. A faint smell of something unpleasant wafts out. Your rusty dagger feels inadequate.",
+      "choices": [
+        {"text": "Enter the cave cautiously", "target_node_id": "first_chamber"},
+        {
+          "text": "Search the bushes near the entrance", 
+          "target_node_id": "bushes_loot",
+          "effects": [
+            {"type": "stat_change", "stat": "health", "change_by": -5}
+          ]
+        },
+        {"text": "Leave and go home", "target_node_id": "go_home_end"}
+      ]
+    },
+    "bushes_loot": {
+      "id": "bushes_loot",
+      "text": "You rummage through the thorny bushes, getting a few scratches. Tucked beneath a rock, you find a sturdy shield!",
+      "effects": [
+        {"type": "inventory_change", "item": "sturdy_shield", "action": "add"}
+      ],
+      "choices": [
+        {"text": "Now, enter the cave", "target_node_id": "first_chamber"}
+      ]
+    },
+    "first_chamber": {
+      "id": "first_chamber",
+      "text": "The first chamber is dimly lit by glowing moss. You hear a snuffling sound from a passage to the north. To the east, a rickety wooden chest sits in a corner.",
+      "choices": [
+        {"text": "Investigate the northern passage", "target_node_id": "goblin_encounter"},
+        {
+          "text": "Try to open the chest with a lockpick (requires lockpick)",
+          "target_node_id": "chest_opened",
+          "conditions": [
+            {"type": "inventory_condition", "item": "lockpick", "requires": "present"}
+          ]
+        },
+         {
+          "text": "Try to pry open the chest (requires strength > 7)",
+          "target_node_id": "chest_forced",
+           "conditions": [
+            {"type": "stat_condition", "stat": "strength", "requires_greater_than": 7}
+           ],
+           "effects": [
+            {"type": "stat_change", "stat": "health", "change_by": -10}
+           ]
+        },
+        {"text": "Examine the glowing moss", "target_node_id": "moss_find"}
+      ]
+    },
+    "moss_find":{
+      "id": "moss_find",
+      "text": "The moss is surprisingly warm. You find a small, discarded pouch with 5 gold pieces.",
+      "effects": [
+        {"type": "stat_change", "stat": "gold", "change_by": 5}
+      ],
+      "choices": [
+        {"text": "Go back", "target_node_id": "first_chamber"}
+      ]
+    },
+    "goblin_encounter": {
+      "id": "goblin_encounter",
+      "text": "A grumpy goblin warrior, surprised by your presence, charges at you!",
+      "choices": [
+        {
+          "text": "Fight with your dagger", 
+          "target_node_id": "fight_result",
+          "effects": [
+            {"type": "stat_change", "stat": "health", "change_by": -20}
+          ]
+        },
+        {
+          "text": "Defend with your sturdy shield (if you have it)", 
+          "target_node_id": "fight_result_shield",
+          "conditions": [
+            {"type": "inventory_condition", "item": "sturdy_shield", "requires": "present"}
+          ],
+          "effects": [
+            {"type": "stat_change", "stat": "health", "change_by": -5}
+          ]
+        }
+      ]
+    },
+    "chest_opened": {
+      "id": "chest_opened",
+      "text": "You skillfully open the chest with your lockpick and find a healing potion and 10 gold!",
+      "effects": [
+        {"type": "inventory_change", "item": "healing_potion", "action": "add"},
+        {"type": "stat_change", "stat": "gold", "change_by": 10}
+      ],
+      "choices": [
+        {"text": "Continue exploring", "target_node_id": "first_chamber"}
+      ]
+    },
+    "chest_forced": {
+      "id": "chest_forced",
+      "text": "You grunt and strain, finally forcing the chest open. It was a bit damaged. You find a slightly dented healing potion and 5 gold.",
+      "effects": [
+        {"type": "inventory_change", "item": "healing_potion", "action": "add"},
+        {"type": "stat_change", "stat": "gold", "change_by": 5}
+      ],
+      "choices": [
+        {"text": "Continue exploring", "target_node_id": "first_chamber"}
+      ]
+    },
+    "fight_result": {
+      "id": "fight_result",
+      "text": "After a brief struggle, you defeat the goblin but take some nasty hits. You find 3 gold pieces on it.",
+      "effects": [
+        {"type": "stat_change", "stat": "gold", "change_by": 3}
+      ],
+      "choices": [
+        {"text": "Press onwards", "target_node_id": "deep_cave"},
+        {"text": "Drink a healing potion (if you have one)", 
+         "target_node_id": "potion_drink_after_fight",
+         "conditions": [{"type": "inventory_condition", "item": "healing_potion", "requires": "present"}]
+        }
+      ]
+    },
+     "fight_result_shield": {
+      "id": "fight_result_shield",
+      "text": "Your shield absorbs most of the blow! You manage to defeat the goblin with minimal injury. It dropped 3 gold pieces.",
+      "effects": [
+        {"type": "stat_change", "stat": "gold", "change_by": 3}
+      ],
+      "choices": [
+        {"text": "Press onwards", "target_node_id": "deep_cave"},
+        {"text": "Drink a healing potion (if you have one)", 
+         "target_node_id": "potion_drink_after_fight",
+         "conditions": [{"type": "inventory_condition", "item": "healing_potion", "requires": "present"}]
+        }
+      ]
+    },
+    "potion_drink_after_fight": {
+        "id": "potion_drink_after_fight",
+        "text": "You quickly quaff the healing potion.",
+        "effects": [
+            {"type": "inventory_change", "item": "healing_potion", "action": "remove"},
+            {"type": "stat_change", "stat": "health", "set_to": 100}
+        ],
+        "choices": [
+            {"text": "Press onwards", "target_node_id": "deep_cave"}
+        ]
+    },
+    "deep_cave": {
+      "id": "deep_cave",
+      "text": "You venture deeper into the cave. It's very dark here. You find a goblin treasure stash! You Win!",
+      "effects": [
+        {"type": "stat_change", "stat": "gold", "change_by": 50}
+      ],
+      "choices": []
+    },
+    "go_home_end": {
+      "id": "go_home_end",
+      "text": "You decide this adventuring life isn't for you and return home. Game Over.",
+      "choices": []
+    }
+  }
+}

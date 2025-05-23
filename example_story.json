@@ -1,0 +1,32 @@
+{
+  "title": "My Awesome Adventure",
+  "start_node_id": "1",
+  "nodes": {
+    "1": {
+      "id": "1",
+      "text": "You are at a crossroads. Do you go north or east?",
+      "choices": [
+        {"text": "Go North", "target_node_id": "2"},
+        {"text": "Go East", "target_node_id": "3"}
+      ]
+    },
+    "2": {
+      "id": "2",
+      "text": "You went north and found a treasure chest!",
+      "choices": [
+        {"text": "Open it", "target_node_id": "4"},
+        {"text": "Leave it", "target_node_id": "1"}
+      ]
+    },
+    "3": {
+      "id": "3",
+      "text": "You went east and fell into a pit. Game Over.",
+      "choices": []
+    },
+    "4": {
+      "id": "4",
+      "text": "The chest contained a magical sword! You Win!",
+      "choices": []
+    }
+  }
+}
