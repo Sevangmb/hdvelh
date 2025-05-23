@@ -1,0 +1,43 @@
+{
+  "title": "Multiplayer PoC Story",
+  "max_players": 2,
+  "initial_stats": {"progress_points": 0},
+  "initial_inventory": [],
+  "start_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "text": "You are a team of two adventurers. Before you is a large, sealed door. Do you try to open it?",
+      "choices": [
+        {
+          "text": "Vote to open the door",
+          "target_node_id": "door_opens",
+          "requires_vote": true,
+          "effects": [{"type": "stat_change", "stat": "progress_points", "set_to": 1}]
+        },
+        {
+          "text": "Leave the door alone",
+          "target_node_id": "door_ignored",
+          "effects": [{"type": "stat_change", "stat": "progress_points", "set_to": 0}]
+        }
+      ]
+    },
+    "door_opens": {
+      "id": "door_opens",
+      "text": "The vote passes! The team manages to heave the door open. You see a faint light beyond.",
+      "choices": [
+        {"text": "Enter together", "target_node_id": "treasure_room"}
+      ]
+    },
+    "door_ignored": {
+      "id": "door_ignored",
+      "text": "The team decides not to open the door. You turn back.",
+      "choices": []
+    },
+    "treasure_room": {
+      "id": "treasure_room",
+      "text": "You found the treasure! PoC Complete!",
+      "choices": []
+    }
+  }
+}
